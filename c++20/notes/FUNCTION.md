@@ -163,18 +163,140 @@ Functions:
 	- inline functions: reduce function call overhead
 
 * Call Stack: 
-	- 
+	- debugging call stack!
 
 
+### Templates
+
+* Avoid multiple overloads!
+
+```cpp
+	template<typename T>
+	T maximum(T a, T b){
+		return a>b? a:b;
+	}	
+	
+	// To explicitly call : maximum<double>(1,2);
+
+```
+
+* Blueprint from which compiler generate function based on args and not real code!
+
+```cpp
+	template<typename T>
+	const T& maximum(const T& a, const T&b); 
+```
+
+* Template speacilization: tell compiler to use custom implementation
+
+```cpp
+	template <> 
+	const char *maximum<const char *> (const char *a, const char *b){
+		return strcmp(a,b) > 0 ? a: b;
+	}
+```
+
+	- When we write any template based function or class, compiler creates a copy of that function/class whenever compiler sees that being used for a new data type. If a speacilizaed version is present, compiler first checks with the speacilizedversion by matching the passed parameter. 
+
+```cpp
+	template <class T>
+	void fun(T a){
+		cout << a << endl;
+	}
+
+	template<>
+	void fun(char a){
+		cout << a << endl;
+	}
+```
+
+```cpp
+
+//(3)Function template
+template <typename T> T maximum(T a,T b){
+    std::cout << "Template overload called(T) " << std::endl;
+    return (a > b) ? a : b ; 
+}
+
+//(1)A raw overload will take precedence over any template instance
+//if const char* is passed to maximum
+const char* maximum(const char* a, const char* b){
+	std::cout << "Raw overload called" << std::endl;
+	return (std::strcmp(a,b) > 0) ? a : b ; 
+}
 
 
+//(2)Overload through templates. Will take precedence over raw T
+//if a pointer is passed to maximum
+
+template <typename T> T* maximum(T* a, T* b){
+	std::cout << "Template overload called (T*) " << std::endl;
+     return (*a > *b)? a : b;
+}
+
+```
 
 
+* Function templates with multiple parameter
+
+```cpp
+template <typename T, typename P> maximum(T a, P b);
+
+template <typename T, typename P, typename U> maximum(T a, P b)
+U maximum(T a, P b){
+	return a+b;
+} 
+
+// Bad design : order of template parameter
+
+// Better Approach!
+
+template <typename ReturnType, typename T, typename P>
+ReturnType maximum(T a, P b){
+	return (a>b)? a: b;
+}
+```
+
+* Function template return type with auto:
+
+* auto max1 = maximum(12.5, 5)
+
+```cpp
+	// auto type templates
+	template<typename T, typename S>
+	auto maximum(T a, S b){
+		return a>b ? a : b;
+	}
+```
+
+* Function def has to be present before the auto template function call, else compiler would not be able to resolve the return type.
+
+* Decltype: getting the type of an expression 
+
+eg. 
+	 - decltype((a>b)? a:b) 
 
 
+```cpp
+	template <typename T, typename P>
+	decltype((a>b)?a : b) maximum(T a, Pb){
+		return (a>b) ? a: b; // compiler error 
+	}
+	
+	// decltype as trailing return type!!
+	template <typename T, typename P>
+	auto maximum(T a, T b)-> decltype((a>b)?a:b){
+		return (a>b) ? a: b;
+	}
+```  
 
+* Decltype auto: 
 
-
-
-
+```cpp
+	template<typename T, typename P>
+	decltype(auto) maximum(T a, P b){
+		return a>b ? a:b;
+	}
+```
+* Default Arguments
 

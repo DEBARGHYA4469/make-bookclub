@@ -148,7 +148,28 @@ p = new int(44);
 
 eg. for(auto s: p) cout << s; 
 
+### REFERENCES
 
+* Alias's for variables. eg. int &var1 =  var2;
+
+* References vs Pointers : Can't be changed to reference somthing else.
+
+* Need initialization at declaration
+
+* References & Const: 
+	- int age = 27;
+	- int &ref_age = age; 
+	- const int &ref = age; // can't modify ref, but can modify age 
+	- Can duplicate using const int* const refconst = &age;
+	
+* Range based for-loops 
+
+
+```cpp
+	for(auto &score: scores){
+		score = score * 10; 	
+	}
+```	 
  	
 
 

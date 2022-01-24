@@ -1,0 +1,1 @@
+$(warning Reading foo.mk)

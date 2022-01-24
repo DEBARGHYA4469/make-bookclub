@@ -1,3 +1,4 @@
 *.log
 *.so
 *.o
+a.out

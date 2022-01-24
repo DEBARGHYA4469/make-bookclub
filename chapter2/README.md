@@ -127,4 +127,109 @@
 
 #### STATIC PATTERN RULES
 
-	
+* % is equivalent to * in Linux.
+
+* A static pattern rule is one that applies only to a specific list of targets.
+
+```
+	$(OBJECTS): %.o: %.c
+		$(CC) -c $(CFLAGS) $< -o $@
+```	
+
+#### SUFFIX RULES
+
+* Suffix Rules consist of one or two suffixes concatenated and used as a target.
+
+```
+	.c.o: 
+		$(COMPILE.c) $(OUTPUT_OPTION) $<
+```
+
+It is same as 
+
+```
+	%.o: %.c
+		$(COMPILE.c) $(OUTPUT_OPTION) $<
+```
+
+* Every time you see a .c file use the rule below to make a .o file
+
+* The known suffixes are: 
+	- .SUFFIXES: .out .a .ln .o .c .cc .C .cpp .p .f .F .r .y .l
+
+* You can add your own suffixes by simply adding .SUFFIXES rule to you make
+
+ 	- .SUFFIXES: .pdf .fo .html .xml
+
+* Make deletes all the intermediate files it creates using the implicit rules.
+
+#### RULES STRUCTURE
+
+* The built-in rules have a standard structure intended to make them easily customizable.
+
+eg.
+
+```
+	%.o: %.c 
+		$(COMPILE.c) $(OUTPUT_OPTION) $<
+``` 
+
+* The customization of this rule can be controlled entirely by set of variable it uses like COMPILE.c and OUTPUT_OPTION.
+
+```
+	COMPILE.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
+	CC = gcc
+	OUTPUT_OPTION = -o $@
+```
+
+#### Implict Rules for Source Control
+
+* Make knows about two source code control system, RCS and SCCS.
+
+#### SPEACIAL TARGETS
+
+* A speacial target is a built-in phony target used to change make's default benhaviour, eg. .PHONY
+
+* Some other useful target modifiers: 
+
+	- INTERMEDIATE: Prerequisites of this speacial target are treated as intermediate files. If make creates the file while updating another target the file will be deleted automatically when make exits.
+
+	- .SECONDARY: Prerequisites of this special target are treated as intermediate files but are never
+automatically deleted. The most common use of .SECONDARY is to mark object
+files stored in libraries. Normally these object files will be deleted as soon as they
+are added to an archive.
+
+	- PRECIOUS: When make is interrupted during execution it may delete the target file if it is updating the file when make started. So that make does not leave a partially constructed file laying around in the build tree.
+
+	- DELETE_ON_ERROR
+
+
+#### Automatic Dependency Generation
+
+* To list the depedency of headers use -M flag
+
+```
+	echo "#include <stdio.h>" > stdio.c
+	gcc -M stdio.c 
+```  
+
+* - suppresses the warnings.
+
+* ar crv libcounter.a counter.o lexer.o : Archive contents to library
+	- c: create 
+	- r: replace
+	- v: verbose
+
+#### Double Colon Rules:
+
+* Same target to be updated with different commands depending on which set of prerequisites are newer than the other.
+
+```
+	file-list::generate-list-script
+		chmod +x $<
+		....	
+	file-list:: $(files)
+		.....
+```
+
+

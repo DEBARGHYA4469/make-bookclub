@@ -131,4 +131,90 @@ Following is not a constructor delegation!
 
 ## Copy Constructor
 
+```cpp
+	class Person{
+	private:
+		string last_name, first_name;
+		int *age;
+	public:
+		Person() = default;
+		Person(string last_name_param, string first_name_param, int age_param);
+		Person(string last_name);
+
+		void print_info(){
+			cout << "Printing object info: " << endl;
+		}
+	};
+
+	int main(){
+		Person p1 = Person("John", "Snow", 25);
+		p1.print_info();
+
+		Person p2(p1); // create copies
+		p2.print_info();
+	}
+```
+
+* member wise copy. address of pointer age also gets copied. 
+
+```cpp
+	Person p1("John","Snow",25);
+	Person p2(p1);
+	p1.set_age(30);
+
+	p1.print_info(); // age = 30
+	p1.print_info(); // age = 30
+```
+
+* Generated copy constructor does memberwise copies. 
+
+* It is possible for set up a copy constructor
+```cpp
+
+	/* This is wrong!!
+		We are passing p by value, which again invokes copy constructor. endless chain of copy constructor 	
+	*/
+	Person::Person(const Person p): last_name(p.get_last_name()), first_name(p.get_first_name(), age(p.get_age())) {} 
+	/*
+		This works, but it still does member wise copy!!. Bad!
+	*/
+	Person::Person(const Person &p): last_name(p.get_last_name()), first_name(p.get_first_name(), age(p.get_age())) {} 
+
+	Person::Person(const Person &p): last_name(p.get_last_name()),
+									 first_name(p.get_first_name(), 
+									 age(new int(*(p.get_age()))) {} // Good
+
+	Person::Person(const Person &p): Person(p.get_last_name(),
+									 p.get_first_name(),
+									 *(p.get_age())) {}								 
+```
+
+* Pass by value leads to endless chain of copy constructor calls.
+
+```cpp
+// Delegate from copy constructor
+Person::Person(const Person &p): Person(p.get_first_name, p.get_last_name, *(p.get_age)) {}
+```
+* Objects stored in arrays are copies
+
+```cpp
+	Person s1{"John", "Out"};
+	Person s2{"Sean", "Out"};
+	Person s3{"Bill", "Out"};
+
+	Person students[] = {s1, s2, s3, Person(s1)}; // copies of the objects 
+
+	// Use references to avoid copies 
+	for(Person& s: students){
+		s.set_first_name("Array");
+	}
+```
+
+* Shallow Copy vs Deep Copy:
+	- Member wise copy of member variables even for pointers
+	- When pointer member variables are involved allocating new memory, deep copy.
+
+### Move Constructor
+
+
 

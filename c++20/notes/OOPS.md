@@ -56,11 +56,23 @@ CONSTRUCTORS:
 			// SETTERS
 			void setradii(double r){ r=r; } 
 			void setheight(double h){ h=h; }
-	} 
+	}
 ```
 * Class across multiple files 
 
+	- How to split class across multiple files? 
+		- move constants across other files
 
+```cpp
+	>> cylinder.h 
+	#include "constants"
+	
+	>> main.cpp 
+	#include "constants"
+	#include "cylinder"
+```
+* Including header from nested headers can result in compile error because preprocessor directive just adds the header in the file main.cpp
 
+* One way to solve this is use #define eg. in ex1 
 
 

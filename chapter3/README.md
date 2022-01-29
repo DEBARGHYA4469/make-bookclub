@@ -192,5 +192,5 @@ all: $(programs)
 	- Within the makefile all paths are relative to the makefile directory.
 * MAKEFILE_LIST: This variable contains list of each file make has read including the default makefile and makefiles specified on the command line or through include directives.
 
-* MAKECMDGOALS: 
+* MAKECMDGOALS 
 

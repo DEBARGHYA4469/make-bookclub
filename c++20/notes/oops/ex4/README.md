@@ -163,7 +163,7 @@ Following is not a constructor delegation!
 	p1.set_age(30);
 
 	p1.print_info(); // age = 30
-	p1.print_info(); // age = 30
+	p2.print_info(); // age = 30
 ```
 
 * Generated copy constructor does memberwise copies. 
@@ -215,6 +215,36 @@ Person::Person(const Person &p): Person(p.get_first_name, p.get_last_name, *(p.g
 	- When pointer member variables are involved allocating new memory, deep copy.
 
 ### Move Constructor
+
+* steal data from other objects(temporary objects)
+
+	
+```cpp
+	class Point{
+		private : 
+			double *x {}; 
+			double *y {};
+		public: 
+			Point(double x_param, double y_param);
+			~Point();
+	}
+
+``` 
+
+* Point p3(Point(40.7, 50.3)): steal data from Point(40.7,50.3)
+
+```cpp
+	// move constructor
+	Point::Point(Point&& source_point): x(source_point.get_x()), y(source_point.get_y())
+	{
+		source_point.invalidate();
+		cout << "body of move constructor" << endl;
+	}
+```
+
+* Point p3(std::move(Point(40.7, 50.3))) : force compiler as temporary with std::move
+
+* 
 
 
 

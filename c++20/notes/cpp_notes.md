@@ -1293,12 +1293,58 @@ class Point{
 - {}  allows narrowing conversions, while () does not. 
 
 
+## c++ compilation model
+
+source code -> preprocessor->translation units->compiler->object files->linking
+
+One definition rule: definitions cannot show up more than once in cpp program/ translation unit. 
+
+external linkage: declare in 1 TU and use other places.
+
+Linkage:
+	-Function locals have no linkage 
+	-Const global have internal linkage(in TU where defined)
+  -Non Const global variables have external linkage 
+  -functions have external linkage 
 
 
+* ```extern int item_count = 6;```
 
+### Flipping Linkage 
 
+```extern const double distance; // declaring const double variable defined in some_other_file```
 
+```static void some_func(){
+....
+}
+```
 
-  
+Internal -> External : extern keyword
+External -> Internal : static keyword, anonymous namespace
+
+### Inline variables and functions: 
+
+- 2 files have same variable declaration. 
+- inline keyword
+
+utility1.cpp
+
+```cpp
+		inline int age = 12;	
+```
+
+utility2.cpp
+```cpp
+		inline int age = 12;
+```
+
+- inline means can be used each variable/function is confined to be used in each TU. 
+
+- function signature should be same. content should also be same. 
+
+- address of inline variables are same. 
+
+- usecase: suppose you have a function definition in a header file and the header file is included in multiple cpp files so while linking it will throw error for multiple definitions. 
+
 
 

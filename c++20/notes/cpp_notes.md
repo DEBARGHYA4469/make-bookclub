@@ -1347,4 +1347,8 @@ utility2.cpp
 - usecase: suppose you have a function definition in a header file and the header file is included in multiple cpp files so while linking it will throw error for multiple definitions. 
 
 
+### Inline vs Static (unnamed namespaces)
+
+- definitions for a name into one 
+- static/ unnamed namespaces wont do optimization 
 
